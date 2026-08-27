@@ -34,7 +34,7 @@ jobs:
           header > div { width: 100% !important; max-width: none !important; box-sizing: border-box !important; }
           header > div > div:first-child {
             position: relative !important;
-            min-height: 58px !important;
+            min-height: 53px !important;
             margin-bottom: 5px !important;
             border: 0 !important;
             box-shadow: none !important;
@@ -78,7 +78,7 @@ jobs:
           header nav::-webkit-scrollbar { display: none !important; }
           @media (max-width: 767px) {
             header > div { padding-left: 20px !important; padding-right: 20px !important; }
-            header > div > div:first-child { min-height: 42px !important; margin-bottom: 5px !important; }
+            header > div > div:first-child { min-height: 36px !important; margin-bottom: 5px !important; }
             header > div > div:first-child > a:first-of-type,
             header .epl-site-title {
               width: 78vw !important;
@@ -93,7 +93,6 @@ jobs:
           }
           '''
 
-          # Remove every previous injected EPL header style, including earlier clean copies.
           old_markers = (
               'EPL shared header',
               'EPL full-bleed shell',
@@ -120,5 +119,5 @@ jobs:
             echo "No HTML changes needed"
             exit 0
           fi
-          git commit -m "Remove duplicate header rules"
+          git commit -m "Tighten title-to-navigation spacing"
           git push
