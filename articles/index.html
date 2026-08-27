@@ -103,6 +103,42 @@
             }
         }
     </script>
+<style>
+
+/* EPL shared header: centered, bounded, responsive */
+header > div > div:first-child { position: relative; min-height: 48px; }
+.epl-site-title {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(62vw, 720px) !important;
+  max-width: calc(100% - 220px) !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: clamp(22px, 4vw, 48px) !important;
+  line-height: 1 !important;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  header > div { padding-left: 20px !important; padding-right: 20px !important; }
+  .epl-site-title {
+    width: 78vw !important;
+    max-width: calc(100% - 92px) !important;
+    font-size: clamp(19px, 7vw, 30px) !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 1100px) {
+  .epl-site-title { max-width: calc(100% - 190px) !important; }
+}
+@media (min-width: 768px) {
+  header nav { max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+  header nav::-webkit-scrollbar { display: none; }
+}
+
+</style>
 </head>
 <body class="bg-background text-on-background antialiased selection:bg-secondary selection:text-on-secondary">
 <!-- TopAppBar -->
@@ -233,4 +269,18 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
         
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const titles = Array.from(document.querySelectorAll('header a')).filter(function (a) {
+    return a.textContent.trim().toLowerCase() === 'economic policy lab';
+  });
+  const title = titles[titles.length - 1];
+  if (title) {
+    title.classList.add('epl-site-title');
+    title.setAttribute('href', '/home/expanded-articles.html');
+  }
+});
+</script>
+
 </body></html>
