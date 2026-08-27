@@ -200,6 +200,25 @@ header nav {
 }
 
 </style>
+<style>
+
+/* EPL full-bleed shell: header and footer reach both viewport edges */
+html, body { margin: 0 !important; padding: 0 !important; max-width: none !important; overflow-x: hidden !important; }
+header, footer {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+header > div, footer > div {
+  box-sizing: border-box !important;
+}
+@media (max-width: 767px) {
+  header > div, footer > div { padding-left: 20px !important; padding-right: 20px !important; }
+}
+
+</style>
 </head>
 <body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
 <!-- TopAppBar Component -->
