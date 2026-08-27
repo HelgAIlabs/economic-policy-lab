@@ -47,7 +47,7 @@ jobs:
             background: #fbf9f8 !important;
           }
 
-          /* The visible content margin matches the supplied reference image. */
+          /* The logo/search/contact content keeps the Home reference margins. */
           header > div {
             width: min(83vw, 1696px) !important;
             max-width: none !important;
@@ -113,13 +113,11 @@ jobs:
             z-index: 4 !important;
           }
 
-          /* Search icon */
           header > div > div:first-child .material-symbols-outlined {
             font-size: 29px !important;
             line-height: 1 !important;
           }
 
-          /* Contact button */
           header > div > div:first-child button:not(.md\\:hidden) {
             min-width: 159px !important;
             height: 51px !important;
@@ -131,14 +129,17 @@ jobs:
             box-sizing: border-box !important;
           }
 
-          /* Navigation: the two rules are always continuous and responsive. */
+          /* Navigation lines are full viewport width on every device. */
           header nav {
             display: flex !important;
             position: relative !important;
-            width: 100% !important;
+            width: 100vw !important;
             max-width: none !important;
             min-height: 59px !important;
-            margin: 0 !important;
+            margin-left: calc(50% - 50vw) !important;
+            margin-right: calc(50% - 50vw) !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
             padding: 7px 0 13px !important;
             border-top: 2px solid #b8b8b8 !important;
             border-bottom: 2px solid #b8b8b8 !important;
@@ -156,7 +157,6 @@ jobs:
           header nav::-webkit-scrollbar { display: none !important; }
           header nav a { flex: 0 0 auto !important; }
 
-          /* Active underline matches the reference. */
           header nav a.border-b-2 {
             border-bottom-width: 2px !important;
             padding-bottom: 7px !important;
@@ -194,6 +194,9 @@ jobs:
               padding: 0 !important;
             }
             header nav {
+              width: 100vw !important;
+              margin-left: calc(50% - 50vw) !important;
+              margin-right: calc(50% - 50vw) !important;
               min-height: 52px !important;
               padding: 6px 8px 10px !important;
               justify-content: flex-start !important;
@@ -228,13 +231,11 @@ jobs:
                   continue
               text = path.read_text(encoding='utf-8')
 
-              # Remove previous EPL header override blocks only.
               text = style_pattern.sub(
                   lambda m: '' if any(marker in m.group(0) for marker in old_markers) else m.group(0),
                   text
               )
 
-              # Repair the malformed nested title anchor left by the previous editor pass.
               text = re.sub(
                   r'(<a\b[^>]*href="/"[^>]*>)\s*<a\b[^>]*>\s*Economic policy lab\s*</a>\s*</a>',
                   r'\1Economic Policy Lab</a>',
@@ -242,7 +243,6 @@ jobs:
                   flags=re.I | re.S,
               )
 
-              # Ensure exactly one final EPL header stylesheet immediately before </head>.
               text = text.replace('</head>', '<style>\n' + final_css + '\n</style>\n</head>', 1)
               path.write_text(text, encoding='utf-8')
 
@@ -256,5 +256,5 @@ jobs:
             echo "No HTML changes needed"
             exit 0
           fi
-          git commit -m "Standardize EPL header across all pages"
+          git commit -m "Standardize full-width EPL navigation lines"
           git push
