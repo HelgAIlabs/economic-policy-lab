@@ -51,21 +51,32 @@ jobs:
 
           def make_header(active_href):
               h = base_header
+
+              # The site title also links to "/". Only change navigation links,
+              # so Home's active underline never gets applied to the title.
+              nav_match = re.search(r'<nav\b[\s\S]*?</nav>', h, re.I)
+              if not nav_match:
+                  raise SystemExit('Could not find navigation in Team header')
+
+              nav = nav_match.group(0)
+
               # Remove Team's active state first.
-              h = re.sub(
+              nav = re.sub(
                   r'<a class="[^"]*" href="/team">',
                   f'<a class="{normal_class}" href="/team">',
-                  h,
+                  nav,
                   count=1,
               )
-              # Apply the active state to the requested page.
-              h = re.sub(
+
+              # Apply the active state only inside <nav>.
+              nav = re.sub(
                   rf'<a class="[^"]*" href="{re.escape(active_href)}">',
                   f'<a class="{active_class}" href="{active_href}">',
-                  h,
+                  nav,
                   count=1,
               )
-              return h
+
+              return h[:nav_match.start()] + nav + h[nav_match.end():]
 
           targets = {
               Path('home/expanded-articles.html'): '/',
@@ -78,8 +89,7 @@ jobs:
 
               text = path.read_text(encoding='utf-8')
 
-              # Remove any previous header patch and install the exact working
-              # header CSS from Team, rather than stacking another override.
+              # Install the exact working header CSS from Team.
               text, style_count = re.subn(
                   r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
                   base_style,
@@ -90,7 +100,7 @@ jobs:
               if style_count != 1:
                   raise SystemExit(f'Could not replace EPL header CSS in {path}')
 
-              # Replace the entire header, fixing malformed/nested markup at once.
+              # Replace the entire header so malformed/nested old markup is gone.
               text, header_count = re.subn(
                   r'<header\b[\s\S]*?</header>',
                   make_header(active_href),
@@ -101,7 +111,7 @@ jobs:
               if header_count != 1:
                   raise SystemExit(f'Could not replace header in {path}')
 
-              # Delete the old geometry patch if it is still present.
+              # Delete any old geometry patch if it is still present.
               text = re.sub(
                   r'<style id="epl-header-overlap-fix">[\s\S]*?</style>\s*',
                   '',
@@ -121,5 +131,5 @@ jobs:
             echo "No header changes needed"
             exit 0
           fi
-          git commit -m "Use working Team header on Home and Articles"
+          git commit -m "Fix Home header active navigation underline"
           git push
