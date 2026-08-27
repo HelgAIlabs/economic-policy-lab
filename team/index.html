@@ -147,6 +147,64 @@ header > div > div:first-child { position: relative; min-height: 48px; }
 }
 
 </style>
+<style>
+
+/* EPL shared header: centered title with a clear line underneath */
+header > div > div:first-child {
+  position: relative !important;
+  min-height: 72px !important;
+  margin-bottom: 0 !important;
+  align-items: center !important;
+}
+
+header > div > div:first-child > a:first-of-type {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(68vw, 760px) !important;
+  max-width: calc(100% - 220px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: clamp(28px, 4vw, 48px) !important;
+  line-height: 1 !important;
+  z-index: 2 !important;
+}
+
+header nav {
+  position: relative !important;
+  z-index: 1 !important;
+  border-top: 1px solid #E0E0E0 !important;
+  padding-top: 14px !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 767px) {
+  header > div {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  header > div > div:first-child {
+    min-height: 52px !important;
+  }
+  header > div > div:first-child > a:first-of-type {
+    width: 78vw !important;
+    max-width: calc(100% - 92px) !important;
+    font-size: clamp(19px, 7vw, 30px) !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1100px) {
+  header > div > div:first-child > a:first-of-type {
+    max-width: calc(100% - 190px) !important;
+  }
+}
+
+</style>
 </head>
 <body class="bg-background text-on-background antialiased selection:bg-secondary selection:text-on-secondary">
 <!-- TopAppBar -->
