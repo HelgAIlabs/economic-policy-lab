@@ -224,6 +224,27 @@ header > div, footer > div {
 }
 
 </style>
+<style>
+
+/* EPL navigation dividers: visible grey rules above and below navigation */
+header nav {
+  border-top: 2px solid #B8B8B8 !important;
+  border-bottom: 2px solid #B8B8B8 !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+  box-sizing: border-box !important;
+}
+
+@media (max-width: 767px) {
+  header nav {
+    border-top-width: 2px !important;
+    border-bottom-width: 2px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+</style>
 </head>
 <body class="bg-surface text-on-surface font-body-md antialiased selection:bg-secondary selection:text-white">
 <!-- TopAppBar -->
