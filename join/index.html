@@ -110,68 +110,189 @@
     </style>
 <style>
 
-/* EPL FINAL HEADER — one clean responsive header rule */
-html, body { margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
-header { border: 0 !important; outline: 0 !important; box-shadow: none !important; width: 100% !important; max-width: none !important; margin: 0 !important; }
-header > div { width: 100% !important; max-width: none !important; box-sizing: border-box !important; }
+/* EPL HEADER — exact editorial layout, fluid on every device */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+header {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 19px 0 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+  background: #fbf9f8 !important;
+}
+
+/* The visible content margin matches the supplied reference image. */
+header > div {
+  width: min(83vw, 1696px) !important;
+  max-width: none !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Logo/search/contact row */
 header > div > div:first-child {
   position: relative !important;
-  min-height: 53px !important;
-  margin-bottom: 5px !important;
+  width: 100% !important;
+  min-height: 51px !important;
+  height: 51px !important;
+  margin: 0 0 33px !important;
+  padding: 0 !important;
   border: 0 !important;
   box-shadow: none !important;
+  box-sizing: border-box !important;
 }
+
 header > div > div:first-child > a:first-of-type,
 header .epl-site-title {
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
   transform: translate(-50%, -50%) !important;
-  width: min(68vw, 760px) !important;
-  max-width: calc(100% - 220px) !important;
+  width: auto !important;
+  max-width: calc(100% - 260px) !important;
   margin: 0 !important;
   padding: 0 !important;
   text-align: center !important;
   white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  font-size: clamp(22px, 4vw, 48px) !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: clamp(30px, 3.15vw, 48px) !important;
+  font-weight: 700 !important;
   line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: #000 !important;
   z-index: 2 !important;
 }
-header nav {
-  position: relative !important;
-  z-index: 3 !important;
-  width: 100vw !important;
-  max-width: none !important;
-  margin-left: calc(50% - 50vw) !important;
-  margin-right: calc(50% - 50vw) !important;
-  margin-top: 0 !important;
+
+header > div > div:first-child > div:last-child {
+  position: absolute !important;
+  right: 0 !important;
+  top: 0 !important;
+  height: 51px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 24px !important;
+  z-index: 4 !important;
+}
+
+header > div > div:first-child > div:first-child {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  height: 51px !important;
+  display: flex !important;
+  align-items: center !important;
+  z-index: 4 !important;
+}
+
+/* Search icon */
+header > div > div:first-child .material-symbols-outlined {
+  font-size: 29px !important;
+  line-height: 1 !important;
+}
+
+/* Contact button */
+header > div > div:first-child button:not(.md\\:hidden) {
+  min-width: 159px !important;
+  height: 51px !important;
+  padding: 0 28px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+  color: #fff !important;
   box-sizing: border-box !important;
-  border-top: 2px solid #B8B8B8 !important;
-  border-bottom: 2px solid #B8B8B8 !important;
+}
+
+/* Navigation: the two rules are always continuous and responsive. */
+header nav {
+  display: flex !important;
+  position: relative !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 59px !important;
+  margin: 0 !important;
+  padding: 7px 0 13px !important;
+  border-top: 2px solid #b8b8b8 !important;
+  border-bottom: 2px solid #b8b8b8 !important;
   border-left: 0 !important;
   border-right: 0 !important;
-  padding-top: 5px !important;
-  padding-bottom: 12px !important;
+  box-sizing: border-box !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 68px !important;
   overflow-x: auto !important;
   scrollbar-width: none !important;
+  white-space: nowrap !important;
 }
+
 header nav::-webkit-scrollbar { display: none !important; }
+header nav a { flex: 0 0 auto !important; }
+
+/* Active underline matches the reference. */
+header nav a.border-b-2 {
+  border-bottom-width: 2px !important;
+  padding-bottom: 7px !important;
+}
+
 @media (max-width: 767px) {
-  header > div { padding-left: 20px !important; padding-right: 20px !important; }
-  header > div > div:first-child { min-height: 36px !important; margin-bottom: 5px !important; }
+  header {
+    padding-top: 12px !important;
+  }
+  header > div {
+    width: calc(100% - 40px) !important;
+  }
+  header > div > div:first-child {
+    min-height: 42px !important;
+    height: 42px !important;
+    margin-bottom: 14px !important;
+  }
   header > div > div:first-child > a:first-of-type,
   header .epl-site-title {
-    width: 78vw !important;
-    max-width: calc(100% - 92px) !important;
-    font-size: clamp(19px, 7vw, 30px) !important;
+    max-width: calc(100% - 120px) !important;
+    font-size: clamp(21px, 7vw, 30px) !important;
+    letter-spacing: -0.03em !important;
   }
-  header nav { padding-top: 5px !important; padding-bottom: 10px !important; }
+  header > div > div:first-child > div:last-child {
+    height: 42px !important;
+    gap: 10px !important;
+  }
+  header > div > div:first-child > div:first-child {
+    height: 42px !important;
+  }
+  header > div > div:first-child button:not(.md\\:hidden) {
+    min-width: 0 !important;
+    width: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+  }
+  header nav {
+    min-height: 52px !important;
+    padding: 6px 8px 10px !important;
+    justify-content: flex-start !important;
+    gap: 30px !important;
+  }
 }
+
 @media (min-width: 768px) and (max-width: 1100px) {
+  header > div {
+    width: calc(100% - 80px) !important;
+  }
+  header nav { gap: 42px !important; }
   header > div > div:first-child > a:first-of-type,
-  header .epl-site-title { max-width: calc(100% - 190px) !important; }
+  header .epl-site-title {
+    max-width: calc(100% - 220px) !important;
+    font-size: clamp(27px, 4vw, 40px) !important;
+  }
 }
 
 </style>
