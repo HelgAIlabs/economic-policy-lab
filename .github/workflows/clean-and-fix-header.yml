@@ -93,11 +93,12 @@ jobs:
           }
           '''
 
+          # Remove every previous injected EPL header style, including earlier clean copies.
           old_markers = (
-              'EPL shared header:',
-              'EPL full-bleed shell:',
-              'EPL navigation dividers:',
-              'EPL FINAL HEADER:'
+              'EPL shared header',
+              'EPL full-bleed shell',
+              'EPL navigation dividers',
+              'EPL FINAL HEADER'
           )
           pattern = re.compile(r'<style\b[^>]*>.*?</style>\s*', re.I | re.S)
 
@@ -119,5 +120,5 @@ jobs:
             echo "No HTML changes needed"
             exit 0
           fi
-          git commit -m "Clean up accumulated header overrides"
+          git commit -m "Remove duplicate header rules"
           git push
