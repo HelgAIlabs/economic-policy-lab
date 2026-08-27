@@ -321,4 +321,24 @@
 </div>
 </div>
 </footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const links = {
+        "Home": "/home/expanded-articles.html",
+        "Research": "/research/",
+        "Articles": "/articles/",
+        "Team": "/team/",
+        "Join Us": "/join/"
+    };
+
+    document.querySelectorAll("nav a").forEach(function (link) {
+        const name = link.textContent.trim();
+        if (links[name]) {
+            link.href = links[name];
+        }
+    });
+});
+</script>
+        
 </body></html>
