@@ -279,6 +279,162 @@ header nav a.border-b-2 {
 }
 
 </style>
+
+<style id="epl-header-overlap-fix">
+/* Match the Research-page header geometry: title above the nav line. */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+}
+
+header {
+  width: 100% !important;
+  max-width: none !important;
+  height: 177px !important;
+  min-height: 177px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+  background: #fbf9f8 !important;
+}
+
+header > div {
+  width: 100% !important;
+  max-width: none !important;
+  height: 177px !important;
+  margin: 0 !important;
+  padding: 0 48px !important;
+  box-sizing: border-box !important;
+}
+
+header > div > div:first-child {
+  position: relative !important;
+  width: 100% !important;
+  height: 94px !important;
+  min-height: 94px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+}
+
+header > div > div:first-child > a:first-of-type,
+header .epl-site-title {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(68vw, 760px) !important;
+  max-width: calc(100% - 260px) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: clamp(30px, 3.15vw, 48px) !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: -0.035em !important;
+  color: #000 !important;
+  z-index: 2 !important;
+}
+
+header > div > div:first-child > div:last-child,
+header > div > div:first-child > div:first-child {
+  position: absolute !important;
+  top: 0 !important;
+  height: 94px !important;
+  display: flex !important;
+  align-items: center !important;
+  z-index: 4 !important;
+}
+
+header > div > div:first-child > div:last-child {
+  right: 0 !important;
+  gap: 24px !important;
+}
+
+header > div > div:first-child > div:first-child {
+  left: 0 !important;
+}
+
+header > div > div:first-child .material-symbols-outlined {
+  font-size: 29px !important;
+  line-height: 1 !important;
+}
+
+header nav {
+  display: flex !important;
+  position: relative !important;
+  width: 100vw !important;
+  max-width: none !important;
+  height: 83px !important;
+  min-height: 83px !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 5px 0 12px !important;
+  border-top: 2px solid #b8b8b8 !important;
+  border-bottom: 2px solid #b8b8b8 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  box-sizing: border-box !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 32px !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  white-space: nowrap !important;
+  z-index: 3 !important;
+}
+
+header nav::-webkit-scrollbar { display: none !important; }
+header nav a { flex: 0 0 auto !important; }
+header nav a.border-b-2 {
+  border-bottom-width: 2px !important;
+  padding-bottom: 4px !important;
+}
+
+@media (max-width: 767px) {
+  header {
+    height: 130px !important;
+    min-height: 130px !important;
+  }
+  header > div {
+    height: 130px !important;
+    padding: 0 20px !important;
+  }
+  header > div > div:first-child {
+    height: 62px !important;
+    min-height: 62px !important;
+  }
+  header > div > div:first-child > a:first-of-type,
+  header .epl-site-title {
+    max-width: calc(100% - 92px) !important;
+    font-size: clamp(21px, 7vw, 30px) !important;
+  }
+  header > div > div:first-child > div:last-child,
+  header > div > div:first-child > div:first-child {
+    height: 62px !important;
+  }
+  header nav {
+    height: 68px !important;
+    min-height: 68px !important;
+    justify-content: flex-start !important;
+    gap: 30px !important;
+    padding: 6px 8px 10px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-background text-on-background antialiased selection:bg-secondary selection:text-on-secondary">
 <!-- TopAppBar -->
