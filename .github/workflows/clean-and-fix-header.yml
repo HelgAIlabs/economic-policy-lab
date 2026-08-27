@@ -1,4 +1,4 @@
-name: Fix EPL header overlap
+name: Copy working EPL header
 
 on:
   push:
@@ -8,197 +8,118 @@ permissions:
   contents: write
 
 jobs:
-  fix-header:
+  copy-header:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: Fix Home and Articles header geometry
+      - name: Copy the known-good Team header to Home and Articles
         shell: python
         run: |
           from pathlib import Path
           import re
 
-          files = [
-              Path('home/expanded-articles.html'),
-              Path('articles/index.html'),
-          ]
+          team = Path('team/index.html').read_text(encoding='utf-8')
+          header_match = re.search(r'<header\b[\s\S]*?</header>', team, re.I)
+          style_match = re.search(
+              r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
+              team,
+              re.I,
+          )
 
-          css = r'''
-          <style id="epl-header-overlap-fix">
-          /* Match the Research-page header geometry: title above the nav line. */
-          html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow-x: hidden !important;
+          if not header_match or not style_match:
+              raise SystemExit('Could not find the known-good Team header/style')
+
+          base_header = header_match.group(0)
+          base_style = style_match.group(0)
+
+          normal_class = (
+              'font-label-sm text-label-sm uppercase tracking-wider '
+              'text-on-surface-variant dark:text-on-tertiary-container '
+              'hover:text-primary dark:hover:text-on-surface '
+              'hover:bg-surface-container-low dark:hover:bg-tertiary-container '
+              'transition-colors py-2 px-3'
+          )
+          active_class = (
+              'font-label-sm text-label-sm uppercase tracking-wider '
+              'text-secondary dark:text-secondary-container border-b-2 '
+              'border-secondary dark:border-secondary-container pb-1 '
+              'hover:bg-surface-container-low dark:hover:bg-tertiary-container '
+              'transition-colors px-3'
+          )
+
+          def make_header(active_href):
+              h = base_header
+              # Remove Team's active state first.
+              h = re.sub(
+                  r'<a class="[^"]*" href="/team">',
+                  f'<a class="{normal_class}" href="/team">',
+                  h,
+                  count=1,
+              )
+              # Apply the active state to the requested page.
+              h = re.sub(
+                  rf'<a class="[^"]*" href="{re.escape(active_href)}">',
+                  f'<a class="{active_class}" href="{active_href}">',
+                  h,
+                  count=1,
+              )
+              return h
+
+          targets = {
+              Path('home/expanded-articles.html'): '/',
+              Path('articles/index.html'): '/articles',
           }
 
-          header {
-            width: 100% !important;
-            max-width: none !important;
-            height: 177px !important;
-            min-height: 177px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: 0 !important;
-            outline: 0 !important;
-            box-shadow: none !important;
-            box-sizing: border-box !important;
-            background: #fbf9f8 !important;
-          }
-
-          header > div {
-            width: 100% !important;
-            max-width: none !important;
-            height: 177px !important;
-            margin: 0 !important;
-            padding: 0 48px !important;
-            box-sizing: border-box !important;
-          }
-
-          header > div > div:first-child {
-            position: relative !important;
-            width: 100% !important;
-            height: 94px !important;
-            min-height: 94px !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            border: 0 !important;
-            box-shadow: none !important;
-            box-sizing: border-box !important;
-          }
-
-          header > div > div:first-child > a:first-of-type,
-          header .epl-site-title {
-            position: absolute !important;
-            left: 50% !important;
-            top: 50% !important;
-            transform: translate(-50%, -50%) !important;
-            width: min(68vw, 760px) !important;
-            max-width: calc(100% - 260px) !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            text-align: center !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            font-family: 'Playfair Display', Georgia, serif !important;
-            font-size: clamp(30px, 3.15vw, 48px) !important;
-            font-weight: 700 !important;
-            line-height: 1 !important;
-            letter-spacing: -0.035em !important;
-            color: #000 !important;
-            z-index: 2 !important;
-          }
-
-          header > div > div:first-child > div:last-child,
-          header > div > div:first-child > div:first-child {
-            position: absolute !important;
-            top: 0 !important;
-            height: 94px !important;
-            display: flex !important;
-            align-items: center !important;
-            z-index: 4 !important;
-          }
-
-          header > div > div:first-child > div:last-child {
-            right: 0 !important;
-            gap: 24px !important;
-          }
-
-          header > div > div:first-child > div:first-child {
-            left: 0 !important;
-          }
-
-          header > div > div:first-child .material-symbols-outlined {
-            font-size: 29px !important;
-            line-height: 1 !important;
-          }
-
-          header nav {
-            display: flex !important;
-            position: relative !important;
-            width: 100vw !important;
-            max-width: none !important;
-            height: 83px !important;
-            min-height: 83px !important;
-            margin-left: calc(50% - 50vw) !important;
-            margin-right: calc(50% - 50vw) !important;
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-            padding: 5px 0 12px !important;
-            border-top: 2px solid #b8b8b8 !important;
-            border-bottom: 2px solid #b8b8b8 !important;
-            border-left: 0 !important;
-            border-right: 0 !important;
-            box-sizing: border-box !important;
-            justify-content: center !important;
-            align-items: center !important;
-            gap: 32px !important;
-            overflow-x: auto !important;
-            scrollbar-width: none !important;
-            white-space: nowrap !important;
-            z-index: 3 !important;
-          }
-
-          header nav::-webkit-scrollbar { display: none !important; }
-          header nav a { flex: 0 0 auto !important; }
-          header nav a.border-b-2 {
-            border-bottom-width: 2px !important;
-            padding-bottom: 4px !important;
-          }
-
-          @media (max-width: 767px) {
-            header {
-              height: 130px !important;
-              min-height: 130px !important;
-            }
-            header > div {
-              height: 130px !important;
-              padding: 0 20px !important;
-            }
-            header > div > div:first-child {
-              height: 62px !important;
-              min-height: 62px !important;
-            }
-            header > div > div:first-child > a:first-of-type,
-            header .epl-site-title {
-              max-width: calc(100% - 92px) !important;
-              font-size: clamp(21px, 7vw, 30px) !important;
-            }
-            header > div > div:first-child > div:last-child,
-            header > div > div:first-child > div:first-child {
-              height: 62px !important;
-            }
-            header nav {
-              height: 68px !important;
-              min-height: 68px !important;
-              justify-content: flex-start !important;
-              gap: 30px !important;
-              padding: 6px 8px 10px !important;
-            }
-          }
-          </style>
-          '''
-
-          for path in files:
+          for path, active_href in targets.items():
               if not path.exists():
-                  continue
+                  raise SystemExit(f'Missing target: {path}')
+
               text = path.read_text(encoding='utf-8')
-              text = re.sub(r'<style id="epl-header-overlap-fix">.*?</style>\s*', '', text, flags=re.I | re.S)
-              text = text.replace('</head>', css + '\n</head>', 1)
+
+              # Remove any previous header patch and install the exact working
+              # header CSS from Team, rather than stacking another override.
+              text, style_count = re.subn(
+                  r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
+                  base_style,
+                  text,
+                  count=1,
+                  flags=re.I,
+              )
+              if style_count != 1:
+                  raise SystemExit(f'Could not replace EPL header CSS in {path}')
+
+              # Replace the entire header, fixing malformed/nested markup at once.
+              text, header_count = re.subn(
+                  r'<header\b[\s\S]*?</header>',
+                  make_header(active_href),
+                  text,
+                  count=1,
+                  flags=re.I,
+              )
+              if header_count != 1:
+                  raise SystemExit(f'Could not replace header in {path}')
+
+              # Delete the old geometry patch if it is still present.
+              text = re.sub(
+                  r'<style id="epl-header-overlap-fix">[\s\S]*?</style>\s*',
+                  '',
+                  text,
+                  flags=re.I,
+              )
+
               path.write_text(text, encoding='utf-8')
 
-      - name: Commit fixes
+      - name: Commit copied headers
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add home/expanded-articles.html articles/index.html
           if git diff --cached --quiet; then
-            echo "No changes needed"
+            echo "No header changes needed"
             exit 0
           fi
-          git commit -m "Fix Home and Articles header overlap"
+          git commit -m "Use working Team header on Home and Articles"
           git push
