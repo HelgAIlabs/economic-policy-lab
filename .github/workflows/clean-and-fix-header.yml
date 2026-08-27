@@ -93,14 +93,13 @@ jobs:
           }
           '''
 
-          # Remove all previous EPL-injected style blocks so they cannot fight each other.
           old_markers = (
               'EPL shared header:',
               'EPL full-bleed shell:',
               'EPL navigation dividers:',
               'EPL FINAL HEADER:'
           )
-          pattern = re.compile(r'<style\\b[^>]*>.*?</style>\\s*', re.I | re.S)
+          pattern = re.compile(r'<style\b[^>]*>.*?</style>\s*', re.I | re.S)
 
           for path in files:
               if not path.exists():
