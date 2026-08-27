@@ -1,0 +1,75 @@
+name: Final header line cleanup
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply final header rules
+        shell: python
+        run: |
+          from pathlib import Path
+
+          css = r'''
+          /* EPL FINAL HEADER: exactly two full-width navigation rules */
+          html, body { margin: 0 !important; padding: 0 !important; overflow-x: hidden !important; }
+          header { border: 0 !important; outline: 0 !important; box-shadow: none !important; }
+          header > div { border: 0 !important; outline: 0 !important; box-shadow: none !important; }
+          header > div > div:first-child { border: 0 !important; outline: 0 !important; box-shadow: none !important; margin-bottom: 0 !important; }
+          header nav { 
+            width: 100vw !important;
+            margin-left: calc(50% - 50vw) !important;
+            margin-right: calc(50% - 50vw) !important;
+            box-sizing: border-box !important;
+            border-top: 2px solid #B8B8B8 !important;
+            border-bottom: 2px solid #B8B8B8 !important;
+            border-left: 0 !important;
+            border-right: 0 !important;
+            padding-top: 5px !important;
+            padding-bottom: 12px !important;
+            margin-top: 5px !important;
+          }
+          header nav::before, header nav::after { border: 0 !important; box-shadow: none !important; }
+          @media (max-width: 767px) {
+            header nav {
+              padding-top: 5px !important;
+              padding-bottom: 10px !important;
+              margin-top: 5px !important;
+            }
+          }
+          '''
+
+          marker = '/* EPL FINAL HEADER: exactly two full-width navigation rules */'
+          files = [
+              Path('home/expanded-articles.html'),
+              Path('research/index.html'),
+              Path('articles/index.html'),
+              Path('team/index.html'),
+              Path('join/index.html'),
+          ]
+          for path in files:
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding='utf-8')
+              if marker in text:
+                  continue
+              text = text.replace('</head>', '<style>\n' + css + '\n</style>\n</head>', 1)
+              path.write_text(text, encoding='utf-8')
+
+      - name: Commit
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add home/expanded-articles.html research/index.html articles/index.html team/index.html join/index.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Fix header line count and spacing"
+          git push
