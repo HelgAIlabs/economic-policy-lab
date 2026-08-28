@@ -1,1 +1,1 @@
-Root homepage is served by the Vercel rewrite in vercel.json.
+Force a fresh Vercel production deployment after root routing fix.
