@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Member Access - Economic Policy Lab</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-[#fbf9f8] text-[#1b1c1c]">
+<main class="min-h-screen flex items-center justify-center px-5 py-12">
+<section class="w-full max-w-md bg-white border border-[#e0e0e0] p-8">
+<a href="/" class="text-xs uppercase tracking-[.18em] text-[#af2b3e]">Economic Policy Lab</a>
+<h1 class="font-serif text-4xl font-bold mt-5 mb-2">Member access</h1>
+<p class="text-gray-600 mb-7">Sign in to submit and manage articles.</p>
+<div id="message" class="hidden mb-4 p-3 text-sm border"></div>
+<form id="auth-form" class="space-y-4">
+<label class="block text-sm font-semibold">Email<input id="email" type="email" required class="mt-1 w-full border p-3"></label>
+<label class="block text-sm font-semibold">Password<input id="password" type="password" minlength="6" required class="mt-1 w-full border p-3"></label>
+<button id="submit" class="w-full bg-black text-white py-3 uppercase tracking-wider text-sm font-semibold">Sign in</button>
+</form>
+<div class="flex gap-3 mt-4">
+<button id="signup" class="flex-1 border border-black py-3 text-sm font-semibold">Create account</button>
+<button id="reset" class="flex-1 border py-3 text-sm">Reset password</button>
+</div>
+<a href="/" class="block text-center text-sm mt-7 underline">Back to EPL</a>
+</section></main>
+<script type="module">
+import { supabase } from '../supabase-client.js';
+const form=document.querySelector('#auth-form'), email=document.querySelector('#email'), password=document.querySelector('#password'), msg=document.querySelector('#message');
+function show(text,ok=false){msg.textContent=text;msg.className='mb-4 p-3 text-sm border '+(ok?'border-green-600 text-green-700 bg-green-50':'border-[#af2b3e] text-[#af2b3e] bg-red-50');}
+async function go(){const {data:{session}}=await supabase.auth.getSession();if(session) location.href='/member';}
+go();
+form.addEventListener('submit',async e=>{e.preventDefault();const {error}=await supabase.auth.signInWithPassword({email:email.value,password:password.value});if(error)return show(error.message);location.href='/member';});
+document.querySelector('#signup').onclick=async()=>{const {data,error}=await supabase.auth.signUp({email:email.value,password:password.value});if(error)return show(error.message);show(data.session?'Account created.':'Account created. Check your email to confirm it.',true);};
+document.querySelector('#reset').onclick=async()=>{if(!email.value)return show('Enter your email first.');const {error}=await supabase.auth.resetPasswordForEmail(email.value,{redirectTo:location.origin+'/auth/'});if(error)return show(error.message);show('Password reset email sent.',true);};
+</script>
+</body></html>
