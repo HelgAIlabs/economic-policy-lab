@@ -54,7 +54,7 @@ alter table public.articles enable row level security;
 drop policy if exists "profiles_read_own" on public.profiles;
 create policy "profiles_read_own" on public.profiles for select to authenticated using ((select auth.uid()) = id);
 drop policy if exists "profiles_update_own" on public.profiles;
-create policy "profiles_update_own" on public.profiles for update to authenticated using ((select auth.uid()) = id) with check ((select auth.uid()) = id);
+create policy "profiles_update_own" on public.profiles for update to authenticated using ((select auth.uid()) = id) with check ((select auth.uid()) = id and role = (select p.role from public.profiles p where p.id = auth.uid()));
 drop policy if exists "published_articles_public_read" on public.articles;
 create policy "published_articles_public_read" on public.articles for select to anon, authenticated using (status = 'published');
 drop policy if exists "members_read_own_articles" on public.articles;
@@ -72,5 +72,40 @@ drop policy if exists "admins_delete_articles" on public.articles;
 create policy "admins_select_articles" on public.articles for select to authenticated using ((select public.is_admin()));
 create policy "admins_update_articles" on public.articles for update to authenticated using ((select public.is_admin())) with check ((select public.is_admin()));
 create policy "admins_delete_articles" on public.articles for delete to authenticated using ((select public.is_admin()));
+
+create table if not exists public.team_members (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  role_title text not null default '',
+  bio text not null default '',
+  image_url text,
+  section text not null default 'member' check (section in ('board','member')),
+  sort_order integer not null default 0,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create index if not exists team_members_section_sort_idx on public.team_members(section, sort_order, created_at);
+alter table public.team_members enable row level security;
+drop policy if exists "public_read_active_team_members" on public.team_members;
+create policy "public_read_active_team_members" on public.team_members for select to anon, authenticated using (is_active = true);
+drop policy if exists "admins_select_team_members" on public.team_members;
+create policy "admins_select_team_members" on public.team_members for select to authenticated using ((select public.is_admin()));
+drop policy if exists "admins_insert_team_members" on public.team_members;
+create policy "admins_insert_team_members" on public.team_members for insert to authenticated with check ((select public.is_admin()));
+drop policy if exists "admins_update_team_members" on public.team_members;
+create policy "admins_update_team_members" on public.team_members for update to authenticated using ((select public.is_admin())) with check ((select public.is_admin()));
+drop policy if exists "admins_delete_team_members" on public.team_members;
+create policy "admins_delete_team_members" on public.team_members for delete to authenticated using ((select public.is_admin()));
+
+insert into storage.buckets (id, name, public) values ('team-images', 'team-images', true) on conflict (id) do update set public = excluded.public;
+drop policy if exists "team_images_public_read" on storage.objects;
+create policy "team_images_public_read" on storage.objects for select to anon, authenticated using (bucket_id = 'team-images');
+drop policy if exists "admins_upload_team_images" on storage.objects;
+create policy "admins_upload_team_images" on storage.objects for insert to authenticated with check (bucket_id = 'team-images' and (select public.is_admin()));
+drop policy if exists "admins_update_team_images" on storage.objects;
+create policy "admins_update_team_images" on storage.objects for update to authenticated using (bucket_id = 'team-images' and (select public.is_admin())) with check (bucket_id = 'team-images' and (select public.is_admin()));
+drop policy if exists "admins_delete_team_images" on storage.objects;
+create policy "admins_delete_team_images" on storage.objects for delete to authenticated using (bucket_id = 'team-images' and (select public.is_admin()));
 
 -- The admin account is promoted during the project migration; keep member accounts as members by default.
