@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Member Dashboard - Economic Policy Lab</title><script src="https://cdn.tailwindcss.com"></script></head>
+<body class="bg-[#fbf9f8] text-[#1b1c1c]"><main class="max-w-5xl mx-auto px-5 md:px-12 py-12"><header class="flex justify-between items-start border-b pb-6"><div><a href="/" class="text-xs uppercase tracking-[.18em] text-[#af2b3e]">Economic Policy Lab</a><h1 class="font-serif text-4xl font-bold mt-4">Member dashboard</h1><p id="email" class="text-gray-600 mt-2"></p></div><button id="logout" class="border px-4 py-2 text-sm">Log out</button></header>
+<section class="py-10"><div class="flex justify-between items-center mb-5"><h2 class="font-serif text-2xl font-bold">My articles</h2><a href="/member/write" class="bg-black text-white px-5 py-3 text-sm uppercase tracking-wider">Write an article</a></div><div id="articles" class="border bg-white"><p class="p-6 text-gray-500">Loading...</p></div></section></main>
+<script type="module">import {supabase } from '../supabase-client.js';
+const email=document.querySelector('#email'), list=document.querySelector('#articles');
+const {data:{session}}=await supabase.auth.getSession(); if(!session) location.href='/auth/'; email.textContent=session.user.email;
+document.querySelector('#logout').onclick=async()=>{await supabase.auth.signOut();location.href='/auth/'};
+const {data,error}=await supabase.from('articles').select('id,title,status,created_at').eq('author_id',session.user.id).order('created_at',{ascending:false});
+if(error){list.innerHTML='<p class="p-6 text-red-700">The article database is not configured yet. Please finish the Supabase database setup.</p>';} else if(!data.length){list.innerHTML='<p class="p-6 text-gray-500">You have not submitted an article yet.</p>';} else {list.innerHTML=data.map(a=>`<div class="p-5 border-b last:border-b-0 flex justify-between gap-4"><div><div class="font-semibold">${a.title||'Untitled'}</div><div class="text-xs uppercase tracking-wider text-gray-500 mt-1">${a.status}</div></div></div>`).join('');}
+</script></body></html>
