@@ -5,6 +5,8 @@
     { "source": "/home", "destination": "/", "permanent": true },
     { "source": "/home/expanded-articles.html", "destination": "/", "permanent": true },
     { "source": "/home/expanded-articles", "destination": "/", "permanent": true },
+    { "source": "/managed-articles.html", "destination": "/articles", "permanent": true },
+    { "source": "/managed-research.html", "destination": "/research", "permanent": true },
     { "source": "/articles/index.html", "destination": "/articles", "permanent": true },
     { "source": "/research/index.html", "destination": "/research", "permanent": true },
     { "source": "/team/index.html", "destination": "/team", "permanent": true },
