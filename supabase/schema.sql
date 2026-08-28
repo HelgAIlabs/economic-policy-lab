@@ -66,4 +66,11 @@ create policy "members_update_own_articles" on public.articles for update to aut
 drop policy if exists "members_delete_own_articles" on public.articles;
 create policy "members_delete_own_articles" on public.articles for delete to authenticated using (author_id = (select auth.uid()));
 drop policy if exists "admins_manage_articles" on public.articles;
-create policy "admins_manage_articles" on public.articles for all to authenticated using ((select public.is_admin())) with check ((select public.is_admin()));
+drop policy if exists "admins_select_articles" on public.articles;
+drop policy if exists "admins_update_articles" on public.articles;
+drop policy if exists "admins_delete_articles" on public.articles;
+create policy "admins_select_articles" on public.articles for select to authenticated using ((select public.is_admin()));
+create policy "admins_update_articles" on public.articles for update to authenticated using ((select public.is_admin())) with check ((select public.is_admin()));
+create policy "admins_delete_articles" on public.articles for delete to authenticated using ((select public.is_admin()));
+
+-- The admin account is promoted during the project migration; keep member accounts as members by default.
