@@ -20,6 +20,7 @@
     { "source": "/content/index.html", "destination": "/content", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/", "destination": "/home/expanded-articles.html" },
     { "source": "/research", "destination": "/managed-research.html" },
     { "source": "/articles", "destination": "/managed-articles.html" },
     { "source": "/team", "destination": "/team/index.html" },
