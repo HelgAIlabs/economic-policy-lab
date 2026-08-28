@@ -1,1 +1,34 @@
-{"cleanUrls":false,"trailingSlash":false,"rewrites":[{"source":"/research","destination":"/managed-research.html"},{"source":"/articles","destination":"/managed-articles.html"},{"source":"/team","destination":"/team/index.html"},{"source":"/join","destination":"/join/index.html"},{"source":"/login","destination":"/login/index.html"},{"source":"/auth","destination":"/auth/index.html"},{"source":"/member","destination":"/member/index.html"},{"source":"/member/write","destination":"/member/write/index.html"},{"source":"/admin","destination":"/admin/index.html"},{"source":"/admin/edit","destination":"/admin/edit/index.html"},{"source":"/content","destination":"/content/index.html"}]}
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/home", "destination": "/", "permanent": true },
+    { "source": "/home/expanded-articles.html", "destination": "/", "permanent": true },
+    { "source": "/home/expanded-articles", "destination": "/", "permanent": true },
+    { "source": "/articles/index.html", "destination": "/articles", "permanent": true },
+    { "source": "/research/index.html", "destination": "/research", "permanent": true },
+    { "source": "/team/index.html", "destination": "/team", "permanent": true },
+    { "source": "/join/index.html", "destination": "/join", "permanent": true },
+    { "source": "/login/index.html", "destination": "/login", "permanent": true },
+    { "source": "/auth/index.html", "destination": "/auth", "permanent": true },
+    { "source": "/member/index.html", "destination": "/member", "permanent": true },
+    { "source": "/member/write/index.html", "destination": "/member/write", "permanent": true },
+    { "source": "/admin/index.html", "destination": "/admin", "permanent": true },
+    { "source": "/admin/edit/index.html", "destination": "/admin/edit", "permanent": true },
+    { "source": "/content/index.html", "destination": "/content", "permanent": true }
+  ],
+  "rewrites": [
+    { "source": "/", "destination": "/home/expanded-articles.html" },
+    { "source": "/research", "destination": "/managed-research.html" },
+    { "source": "/articles", "destination": "/managed-articles.html" },
+    { "source": "/team", "destination": "/team/index.html" },
+    { "source": "/join", "destination": "/join/index.html" },
+    { "source": "/login", "destination": "/login/index.html" },
+    { "source": "/auth", "destination": "/auth/index.html" },
+    { "source": "/member", "destination": "/member/index.html" },
+    { "source": "/member/write", "destination": "/member/write/index.html" },
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/admin/edit", "destination": "/admin/edit/index.html" },
+    { "source": "/content", "destination": "/content/index.html" }
+  ]
+}
