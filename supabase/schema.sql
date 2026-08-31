@@ -85,6 +85,8 @@ create table if not exists public.team_members (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+alter table public.team_members add column if not exists linkedin_url text;
+alter table public.team_members add column if not exists instagram_url text;
 create index if not exists team_members_section_sort_idx on public.team_members(section, sort_order, created_at);
 alter table public.team_members enable row level security;
 drop policy if exists "public_read_active_team_members" on public.team_members;
