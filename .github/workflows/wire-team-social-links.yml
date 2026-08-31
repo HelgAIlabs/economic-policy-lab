@@ -1,0 +1,45 @@
+name: Wire team social links
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add social-link scripts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          changes = {
+              Path('admin/index.html'): ('<script type="module" src="/admin/team-socials.js"></script>', '</body>'),
+              Path('team/index.html'): ('<script type="module" src="/team/team-socials.js"></script>', '</body>'),
+          }
+          for path, (marker, closing) in changes.items():
+              text = path.read_text(encoding='utf-8')
+              if marker not in text:
+                  text = text.replace(closing, marker + closing, 1)
+                  path.write_text(text, encoding='utf-8')
+
+          schema = Path('supabase/schema.sql')
+          text = schema.read_text(encoding='utf-8')
+          marker = 'alter table public.team_members add column if not exists linkedin_url text;'
+          if marker not in text:
+              anchor = 'create index if not exists team_members_section_sort_idx on public.team_members(section, sort_order, created_at);'
+              text = text.replace(anchor, 'alter table public.team_members add column if not exists linkedin_url text;\nalter table public.team_members add column if not exists instagram_url text;\n' + anchor, 1)
+              schema.write_text(text, encoding='utf-8')
+          PY
+      - name: Commit wiring
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin/index.html team/index.html supabase/schema.sql
+          git diff --cached --quiet || git commit -m "Add LinkedIn and Instagram team links"
+          git push
