@@ -22,17 +22,19 @@ jobs:
 
           team = Path('team/index.html').read_text(encoding='utf-8')
           header_match = re.search(r'<header\b[\s\S]*?</header>', team, re.I)
+          if not header_match:
+              raise SystemExit('Could not find the known-good Team header')
+
+          # Older Team versions had a dedicated marker around the header CSS,
+          # but the current Team page keeps that CSS in its normal head style.
+          # The header itself is the source of truth; CSS replacement is only
+          # attempted when the legacy marker exists in both source and target.
           style_match = re.search(
               r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
               team,
               re.I,
           )
-
-          if not header_match or not style_match:
-              raise SystemExit('Could not find the known-good Team header/style')
-
-          base_header = header_match.group(0)
-          base_style = style_match.group(0)
+          base_style = style_match.group(0) if style_match else None
 
           normal_class = (
               'font-label-sm text-label-sm uppercase tracking-wider '
@@ -50,32 +52,25 @@ jobs:
           )
 
           def make_header(active_href):
-              h = base_header
-
-              # The site title also links to "/". Only change navigation links,
-              # so Home's active underline never gets applied to the title.
+              h = header_match.group(0)
               nav_match = re.search(r'<nav\b[\s\S]*?</nav>', h, re.I)
               if not nav_match:
                   raise SystemExit('Could not find navigation in Team header')
-
               nav = nav_match.group(0)
 
-              # Remove Team's active state first.
+              # Normalize Team's active state first.
               nav = re.sub(
                   r'<a class="[^"]*" href="/team">',
                   f'<a class="{normal_class}" href="/team">',
                   nav,
                   count=1,
               )
-
-              # Apply the active state only inside <nav>.
               nav = re.sub(
                   rf'<a class="[^"]*" href="{re.escape(active_href)}">',
                   f'<a class="{active_class}" href="{active_href}">',
                   nav,
                   count=1,
               )
-
               return h[:nav_match.start()] + nav + h[nav_match.end():]
 
           targets = {
@@ -89,18 +84,17 @@ jobs:
 
               text = path.read_text(encoding='utf-8')
 
-              # Install the exact working header CSS from Team.
-              text, style_count = re.subn(
-                  r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
-                  base_style,
-                  text,
-                  count=1,
-                  flags=re.I,
-              )
-              if style_count != 1:
-                  raise SystemExit(f'Could not replace EPL header CSS in {path}')
+              if base_style:
+                  text, style_count = re.subn(
+                      r'<style>\s*/\* EPL HEADER — match the Research page exactly \*/[\s\S]*?</style>',
+                      base_style,
+                      text,
+                      count=1,
+                      flags=re.I,
+                  )
+                  if style_count not in (0, 1):
+                      raise SystemExit(f'Unexpected header CSS matches in {path}')
 
-              # Replace the entire header so malformed/nested old markup is gone.
               text, header_count = re.subn(
                   r'<header\b[\s\S]*?</header>',
                   make_header(active_href),
@@ -111,7 +105,6 @@ jobs:
               if header_count != 1:
                   raise SystemExit(f'Could not replace header in {path}')
 
-              # Delete any old geometry patch if it is still present.
               text = re.sub(
                   r'<style id="epl-header-overlap-fix">[\s\S]*?</style>\s*',
                   '',
