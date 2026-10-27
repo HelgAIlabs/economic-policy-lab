@@ -1,8 +1,8 @@
-
 import { Link, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
 import Articles from "./pages/Articles";
+import Content from "./pages/Content";
 
 type PlaceholderPageProps = {
   title: string;
@@ -87,13 +87,7 @@ export default function App() {
         />
 
         <Route
-          path="/content"
-          element={
-            <PlaceholderPage
-              title="Article & Research"
-              description="The original content detail page will be migrated next."
-            />
-          }
+          <Route path="/content" element={<Content />} />
         />
 
         <Route path="*" element={<NotFoundPage />} />
