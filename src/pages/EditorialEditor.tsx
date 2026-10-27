@@ -12,6 +12,8 @@ type ArticleRow = {
   content: string | null;
   content_type: string | null;
   status: string | null;
+  is_featured?: boolean | null;
+  featured_order?: number | null;
 };
 
 const editorButtonStyle: React.CSSProperties = {
@@ -38,6 +40,8 @@ export default function EditorialEditor() {
   const [kind, setKind] = useState("article");
   const [coverUrl, setCoverUrl] = useState("");
   const [status, setStatus] = useState("draft");
+  const [isFeatured, setIsFeatured] = useState(false);
+  const [featuredOrder, setFeaturedOrder] = useState(1);
 
   useEffect(() => {
     let active = true;
@@ -62,7 +66,7 @@ export default function EditorialEditor() {
       if (id) {
         const { data, error: articleError } = await supabase
           .from("articles")
-          .select("id,title,excerpt,category,author_name,cover_image_url,content,content_type,status")
+          .select("id,title,excerpt,category,author_name,cover_image_url,content,content_type,status,is_featured,featured_order")
           .eq("id", id)
           .maybeSingle();
         if (!active) return;
@@ -77,6 +81,8 @@ export default function EditorialEditor() {
           setKind(item.content_type === "research" ? "research" : "article");
           setCoverUrl(item.cover_image_url || "");
           setStatus(item.status || "draft");
+          setIsFeatured(Boolean(item.is_featured));
+          setFeaturedOrder(Number(item.featured_order || 1));
           if (bodyRef.current) bodyRef.current.innerHTML = item.content || "";
           window.setTimeout(() => {
             if (bodyRef.current && item.content) bodyRef.current.innerHTML = item.content;
@@ -133,6 +139,8 @@ export default function EditorialEditor() {
       content: html,
       content_type: kind,
       status: nextStatus,
+      is_featured: isFeatured,
+      featured_order: featuredOrder,
       updated_at: new Date().toISOString(),
       ...(nextStatus === "published" ? { published_at: new Date().toISOString() } : {}),
       ...(!id ? { author_id: userId } : {}),
@@ -184,6 +192,17 @@ export default function EditorialEditor() {
         <label style={{ display: "grid", gap: 7 }}>Cover image URL
           <input value={coverUrl} onChange={e => setCoverUrl(e.target.value)} placeholder="https://…" style={{ padding: 12, borderRadius: 8, border: "1px solid #ccd2d9" }} />
         </label>
+        <section style={{ display: "grid", gap: 10, padding: 16, border: "1px solid #d7dce2", borderRadius: 12 }}>
+          <h2 style={{ margin: 0 }}>Homepage highlight</h2>
+          <label style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <input type="checkbox" checked={isFeatured} onChange={e => setIsFeatured(e.target.checked)} />
+            Show this publication in the homepage Featured Commentary section
+          </label>
+          <label style={{ display: "grid", gap: 7, maxWidth: 240 }}>Display order (1 appears first)
+            <input type="number" min={1} max={3} value={featuredOrder} onChange={e => setFeaturedOrder(Math.max(1, Math.min(3, Number(e.target.value) || 1)))} style={{ padding: 12, borderRadius: 8, border: "1px solid #ccd2d9" }} />
+          </label>
+          <p style={{ margin: 0, color: "#687385" }}>Only published items appear on the homepage. The homepage displays up to three highlighted publications.</p>
+        </section>
         {coverUrl && <img src={coverUrl} alt="Cover preview" style={{ maxWidth: 360, maxHeight: 220, objectFit: "cover", borderRadius: 12 }} onError={e => { e.currentTarget.style.display = "none"; }} />}
         <section style={{ display: "grid", gap: 10 }}>
           <div><h2 style={{ marginBottom: 6 }}>Article body</h2><p style={{ marginTop: 0 }}>Write directly below. Use headings to create sections and add images between paragraphs.</p></div>
