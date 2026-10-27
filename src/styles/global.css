@@ -576,3 +576,135 @@ img {
     padding-left: 32px;
   }
 }
+
+.content-page {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 48px 48px 80px;
+}
+
+.content-back {
+  display: inline-block;
+  color: var(--epl-red);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.content-back:hover {
+  text-decoration: underline;
+}
+
+.content-detail {
+  margin-top: 32px;
+}
+
+.content-category {
+  margin: 0 0 16px;
+  color: var(--epl-red);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.content-detail h1 {
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(36px, 6vw, 60px);
+  font-weight: 700;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.content-byline {
+  margin: 20px 0 0;
+  color: var(--epl-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.content-cover {
+  display: block;
+  width: 100%;
+  max-height: 520px;
+  margin-top: 32px;
+  border: 1px solid var(--epl-border);
+  object-fit: cover;
+}
+
+.content-excerpt {
+  margin: 32px 0 0;
+  color: #4b4b4b;
+  font-size: 20px;
+  line-height: 1.8;
+}
+
+.article-body {
+  margin-top: 32px;
+  color: #292929;
+  font-size: 17px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
+.article-body p {
+  margin: 1.1em 0;
+}
+
+.article-body h2 {
+  margin: 1.5em 0 0.6em;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+}
+
+.article-body h3 {
+  margin: 1.4em 0 0.5em;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.article-body a {
+  color: var(--epl-red);
+  text-decoration: underline;
+}
+
+.article-body img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+}
+
+.article-body blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  border-left: 3px solid var(--epl-red);
+  color: #555;
+  font-style: italic;
+}
+
+.content-error {
+  margin-top: 32px;
+  color: #b42332;
+  line-height: 1.7;
+}
+
+@media (max-width: 760px) {
+  .content-page {
+    padding: 36px 20px 56px;
+  }
+
+  .content-detail {
+    margin-top: 28px;
+  }
+
+  .content-excerpt {
+    font-size: 18px;
+  }
+
+  .article-body {
+    font-size: 16px;
+  }
+}
