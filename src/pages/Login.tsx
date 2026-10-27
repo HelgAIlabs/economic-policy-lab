@@ -13,7 +13,7 @@ export default function Login() {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) return null;
     const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).maybeSingle();
-    return profile?.role === "admin" ? "/admin" : "/member";
+    return profile?.role === "admin" ? "/admin" : profile?.role === "editor" ? "/editor" : "/member";
   }
 
   useEffect(() => {
