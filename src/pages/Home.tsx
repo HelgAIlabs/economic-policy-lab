@@ -15,13 +15,6 @@ type FeaturedItem = {
   featured_order?: number | null;
 };
 
-const stats = [
-  { value: "142", label: "Published Papers" },
-  { value: "850+", label: "Active Economists" },
-  { value: "34", label: "Policy Discussions" },
-  { value: "12", label: "Partner Institutions" },
-];
-
 const fallbackImages = [
   "https://lh3.googleusercontent.com/aida-public/AB6AXuD5v2HztceLAnjheFXT5oLLAJXbH-K38seoBQlLw7ojAupPSn2fqb7a70qj-OFLX6mBLiykLiyyt7C5npbQWole3TIOWV38c0KFcIJRiwlo-TA8dvKsVlmZMuF1Re88yPuyDO_h9NENyevHpHofGRfsvQOUPljDwGKaEXsJCzNBfcU1Vh3WHrBghnaLt0i2HE8wUGiVB8FOStBsdquNXn4imlh6jpKiZyEvZjmLOOE_aKnfX_Lic6ej",
   "https://lh3.googleusercontent.com/aida-public/AB6AXuCCGPiJPxs_Xoo3c2nMvQAndnpwMtnZ82Dpp-OyuUZp7jfn5W2urtfwd3FXumZmT0AGPmrpxfmv4EqLIC7NUGdIOWw77hBhmBLy8l-MQutx_cE1YefHHheK2DQhTq6z3U7Q08wa4rUJ79lkPF7_T6WZi4DHwxmTbWMwKAZmimthWzSU4bYh8vennt3LY8Hn_YO9hB7YwtEn7NzKxYEw9nfH0jzk9PvnMluwOA-RuX7GgQiPw8be8E19",
