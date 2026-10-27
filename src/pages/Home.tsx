@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
@@ -15,6 +14,18 @@ type FeaturedItem = {
   is_featured: boolean | null;
   featured_order?: number | null;
 };
+
+const stats = [
+  { value: "142", label: "Published Papers" },
+  { value: "850+", label: "Active Economists" },
+  { value: "34", label: "Policy Discussions" },
+  { value: "12", label: "Partner Institutions" },
+];
+
+const fallbackImages = [
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuD5v2HztceLAnjheFXT5oLLAJXbH-K38seoBQlLw7ojAupPSn2fqb7a70qj-OFLX6mBLiykLiyyt7C5npbQWole3TIOWV38c0KFcIJRiwlo-TA8dvKsVlmZMuF1Re88yPuyDO_h9NENyevHpHofGRfsvQOUPljDwGKaEXsJCzNBfcU1Vh3WHrBghnaLt0i2HE8wUGiVB8FOStBsdquNXn4imlh6jpKiZyEvZjmLOOE_aKnfX_Lic6ej",
+  "https://lh3.googleusercontent.com/aida-public/AB6AXuCCGPiJPxs_Xoo3c2nMvQAndnpwMtnZ82Dpp-OyuUZp7jfn5W2urtfwd3FXumZmT0AGPmrpxfmv4EqLIC7NUGdIOWw77hBhmBLy8l-MQutx_cE1YefHHheK2DQhTq6z3U7Q08wa4rUJ79lkPF7_T6WZi4DHwxmTbWMwKAZmimthWzSU4bYh8vennt3LY8Hn_YO9hB7YwtEn7NzKxYEw9nfH0jzk9PvnMluwOA-RuX7GgQiPw8be8E19",
+];
 
 export default function Home() {
   const [articles, setArticles] = useState<FeaturedItem[]>([]);
@@ -38,11 +49,9 @@ export default function Home() {
           .eq("is_featured", true)
           .order("featured_order", { ascending: true })
           .order("published_at", { ascending: false })
-          .limit(9);
+          .limit(3);
 
-        if (featuredResult.error) {
-          throw featuredResult.error;
-        }
+        if (featuredResult.error) throw featuredResult.error;
 
         let items = (featuredResult.data ?? []) as FeaturedItem[];
 
@@ -54,127 +63,113 @@ export default function Home() {
             )
             .eq("status", "published")
             .order("published_at", { ascending: false })
-            .limit(6);
+            .limit(3);
 
-          if (latestResult.error) {
-            throw latestResult.error;
-          }
-
+          if (latestResult.error) throw latestResult.error;
           items = (latestResult.data ?? []) as FeaturedItem[];
         }
 
-        if (active) {
-          setArticles(items);
-        }
+        if (active) setArticles(items);
       } catch (err) {
         console.error("Failed to load articles:", err);
-
-        if (active) {
-          setError("Articles could not be loaded. Please try again later.");
-        }
+        if (active) setError("Articles could not be loaded. Please try again later.");
       } finally {
-        if (active) {
-          setLoading(false);
-        }
+        if (active) setLoading(false);
       }
     }
 
     void loadArticles();
-
     return () => {
       active = false;
     };
   }, []);
 
   return (
-    <main>
-      <section className="hero-section">
-        <div className="hero-copy">
-          <p className="eyebrow">Economic Policy Lab</p>
-          <h1>Evidence-based economics for a changing world.</h1>
-          <p className="hero-description">
-            Research, commentary, and policy analysis from the Economic Policy
-            Lab.
+    <main className="home-page">
+      <section className="home-hero">
+        <div className="home-hero-copy">
+          <p className="home-eyebrow">Global Perspective</p>
+          <h1>Empowering Young Economists for Evidence-Based Policy</h1>
+          <p className="home-hero-description">
+            The Economic Policy Lab (EPL) rigorously evaluates policy interventions,
+            advancing the frontier of applied economics to foster sustainable growth
+            and equitable development across emerging markets.
           </p>
+          <div className="home-hero-actions">
+            <Link to="/research" className="home-button home-button-dark">
+              Explore Research
+            </Link>
+            <Link to="/join" className="home-button home-button-outline">
+              Join the Community
+            </Link>
+          </div>
         </div>
 
-        <aside className="hero-note">
-          <p className="eyebrow">Live editorial feed</p>
-          <h2>Featured work</h2>
-          <p>
-            Featured pieces are managed through the admin dashboard. Only
-            published articles marked as featured appear here.
-          </p>
+        <aside className="home-latest-paper">
+          <img
+            className="home-latest-image"
+            src={fallbackImages[1]}
+            alt="Modern institutional architecture in monochrome"
+            loading="lazy"
+          />
+          <div className="home-paper-copy">
+            <p className="home-muted-label">Latest Working Paper</p>
+            <h2>Inflation Targeting in Emerging Economies: A Post-Pandemic Review</h2>
+            <p>
+              Analyzing the efficacy of central bank interventions amidst global
+              supply chain disruptions.
+            </p>
+            <Link to="/research" className="home-read-link">
+              Read Abstract <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </aside>
       </section>
 
-      <section className="featured-section">
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">From the editorial desk</p>
-            <h2>Featured Articles &amp; Research</h2>
+      <section className="home-stats" aria-label="Economic Policy Lab at a glance">
+        {stats.map((stat) => (
+          <div className="home-stat" key={stat.label}>
+            <span className="home-stat-value">{stat.value}</span>
+            <span className="home-stat-label">{stat.label}</span>
           </div>
-          <Link to="/articles" className="text-link">
-            All articles
-          </Link>
+        ))}
+      </section>
+
+      <section className="home-featured">
+        <div className="home-section-heading">
+          <h2>Featured Commentary</h2>
+          <Link to="/articles" className="home-view-all">View All</Link>
         </div>
 
         {loading && <p className="status-message">Loading articles...</p>}
-
-        {!loading && error && (
-          <p className="status-message" role="alert">
-            {error}
-          </p>
-        )}
-
+        {!loading && error && <p className="status-message" role="alert">{error}</p>}
         {!loading && !error && articles.length === 0 && (
-          <p className="status-message">
-            No published articles are available yet.
-          </p>
+          <p className="status-message">No published articles are available yet.</p>
         )}
 
         {!loading && !error && articles.length > 0 && (
-          <div className="article-grid">
-            {articles.map((article) => (
+          <div className="home-commentary-grid">
+            {articles.map((article, index) => (
               <Link
                 key={article.id}
                 to={`/content?id=${encodeURIComponent(String(article.id))}`}
-                className="article-card"
+                className="home-commentary-card"
               >
-                {article.cover_image_url && (
+                <div className="home-commentary-image-wrap">
                   <img
-                    src={article.cover_image_url}
+                    src={article.cover_image_url || fallbackImages[index % fallbackImages.length]}
                     alt=""
-                    className="article-cover"
+                    className="home-commentary-image"
                     loading="lazy"
                   />
-                )}
-
-                <div className="article-card-content">
-                  <p className="article-category">
-                    {article.category || article.content_type || "Article"}
-                  </p>
-
-                  <h3>{article.title}</h3>
-
-                  {article.excerpt && <p>{article.excerpt}</p>}
-
-                  <div className="article-meta">
-                    {article.author_name && <span>{article.author_name}</span>}
-
-                    {article.published_at && (
-                      <time dateTime={article.published_at}>
-                        {new Date(article.published_at).toLocaleDateString(
-                          "en-US",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          }
-                        )}
-                      </time>
-                    )}
-                  </div>
+                </div>
+                <p className="home-commentary-category">
+                  {article.category || article.content_type || "Commentary"}
+                </p>
+                <h3>{article.title}</h3>
+                {article.excerpt && <p className="home-commentary-excerpt">{article.excerpt}</p>}
+                <div className="home-commentary-author">
+                  {article.author_name || "Economic Policy Lab"}
                 </div>
               </Link>
             ))}
