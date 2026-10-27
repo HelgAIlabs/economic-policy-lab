@@ -21,6 +21,7 @@ export default function App() {
   return <div className="app"><Header /><Routes>
     <Route path="/" element={<Home />} />
     <Route path="/articles" element={<Articles />} />
+    <Route path="/articles/:id" element={<Content />} />
     <Route path="/research" element={<Research />} />
     <Route path="/content" element={<Content />} />
     <Route path="/join" element={<Join />} />
