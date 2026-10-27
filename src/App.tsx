@@ -2,6 +2,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import Articles from "./pages/Articles";
 
 type PlaceholderPageProps = {
   title: string;
@@ -43,11 +44,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
 
         <Route
-          path="/articles"
-          element={
-            <PlaceholderPage
-              title="Articles & Insights"
-              description="Editorial analysis and commentary from the Economic Policy Lab."
+          <Route path="/articles" element={<Articles />} />
             />
           }
         />
