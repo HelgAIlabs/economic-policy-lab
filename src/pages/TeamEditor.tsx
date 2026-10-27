@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
+type TeamMemberForm = { name: string; role_title: string; bio: string; image_url: string; section: "board" | "member"; sort_order: number; is_active: boolean; linkedin_url: string; instagram_url: string; };
+
 type TeamMember = {
   id: string;
   name: string;
@@ -17,13 +19,13 @@ type TeamMember = {
 
 const fieldStyle: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 12, border: "1px solid #ccd2d9", borderRadius: 8, background: "#fff" };
 const buttonStyle: React.CSSProperties = { border: "1px solid #d7dce2", background: "#fff", borderRadius: 8, padding: "9px 12px", cursor: "pointer" };
-const blankMember = () => ({ name: "", role_title: "", bio: "", image_url: "", section: "member" as const, sort_order: 0, is_active: true, linkedin_url: "", instagram_url: "" });
+const blankMember = (): TeamMemberForm => ({ name: "", role_title: "", bio: "", image_url: "", section: "member", sort_order: 0, is_active: true, linkedin_url: "", instagram_url: "" });
 
 export default function TeamEditor() {
   const navigate = useNavigate();
   const [ready, setReady] = useState(false);
   const [members, setMembers] = useState<TeamMember[]>([]);
-  const [form, setForm] = useState(blankMember());
+  const [form, setForm] = useState<TeamMemberForm>(blankMember());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [message, setMessage] = useState("Checking editorial access…");
   const [saving, setSaving] = useState(false);
@@ -50,7 +52,7 @@ export default function TeamEditor() {
     return () => { active = false; };
   }, [navigate, load]);
 
-  function update<K extends keyof ReturnType<typeof blankMember>>(key: K, value: ReturnType<typeof blankMember>[K]) {
+  function update<K extends keyof TeamMemberForm>(key: K, value: TeamMemberForm[K]) {
     setForm(current => ({ ...current, [key]: value }));
   }
 
