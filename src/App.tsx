@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, Route, Routes } from "react-router-dom";
 import { supabase } from "./lib/supabase";
+import Header from "./components/Header";
+import Home from "./pages/Home";
+
 
 type FeaturedItem = {
   id: string;
