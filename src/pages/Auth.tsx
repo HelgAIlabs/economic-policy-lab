@@ -14,7 +14,7 @@ export default function Auth() {
       const { data: profile, error: profileError } = await supabase.from("profiles").select("role").eq("id", session.user.id).maybeSingle();
       if (!active) return;
       if (profileError) { setMessage("Your account role could not be verified. Please contact EPL support."); return; }
-      navigate(profile?.role === "admin" ? "/admin" : "/member", { replace: true });
+      navigate(profile?.role === "admin" ? "/admin" : profile?.role === "editor" ? "/editor" : "/member", { replace: true });
     }
     void check();
     return () => { active = false; };
