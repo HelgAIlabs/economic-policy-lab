@@ -53,7 +53,7 @@ export default function EditorialEditor() {
         .eq("id", session.user.id)
         .maybeSingle();
       if (!active) return;
-      if (profileError || profile?.role !== "admin") {
+      if (profileError || !["admin", "editor"].includes(profile?.role || "")) {
         navigate("/login", { replace: true });
         return;
       }
@@ -158,7 +158,7 @@ export default function EditorialEditor() {
     <main className="page-shell" style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 20px 64px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "center", flexWrap: "wrap", marginBottom: 24 }}>
         <div><p className="eyebrow">Economic Policy Lab · Editorial</p><h1 style={{ margin: "8px 0" }}>{id ? "Edit publication" : "Create publication"}</h1><p>Write your article or research, add images, then save a draft or publish.</p></div>
-        <Link className="text-button" to="/admin">← Editorial dashboard</Link>
+        <Link className="text-button" to={userId ? "/editor" : "/login"}>← Editorial workspace</Link>
       </div>
       {message && <p role="status" style={{ padding: 12, borderRadius: 8, background: "#f3f5f7", marginBottom: 16 }}>{message}</p>}
       <form onSubmit={e => e.preventDefault()} style={{ display: "grid", gap: 18 }}>
