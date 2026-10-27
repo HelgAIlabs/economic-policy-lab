@@ -20,17 +20,6 @@
     { "source": "/content/index.html", "destination": "/content", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/home/index.html" },
-    { "source": "/research", "destination": "/managed-research.html" },
-    { "source": "/articles", "destination": "/managed-articles.html" },
-    { "source": "/team", "destination": "/team/index.html" },
-    { "source": "/join", "destination": "/join/index.html" },
-    { "source": "/login", "destination": "/login/index.html" },
-    { "source": "/auth", "destination": "/auth/index.html" },
-    { "source": "/member", "destination": "/member/index.html" },
-    { "source": "/member/write", "destination": "/member/write/index.html" },
-    { "source": "/admin", "destination": "/admin/dashboard.html" },
-    { "source": "/admin/edit", "destination": "/admin/editor.html" },
-    { "source": "/content", "destination": "/content/index.html" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
