@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 
 type ArticleContent = {
@@ -15,8 +15,9 @@ type ArticleContent = {
 };
 
 export default function Content() {
+  const { id: routeId } = useParams();
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("id");
+  const id = routeId || searchParams.get("id");
 
   const [article, setArticle] = useState<ArticleContent | null>(null);
   const [loading, setLoading] = useState(true);
