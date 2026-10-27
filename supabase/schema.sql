@@ -92,13 +92,13 @@ alter table public.team_members enable row level security;
 drop policy if exists "public_read_active_team_members" on public.team_members;
 create policy "public_read_active_team_members" on public.team_members for select to anon, authenticated using (is_active = true);
 drop policy if exists "admins_select_team_members" on public.team_members;
-create policy "admins_select_team_members" on public.team_members for select to authenticated using ((select public.is_admin()));
+create policy "admins_select_team_members" on public.team_members for select to authenticated using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('admin', 'editor')));
 drop policy if exists "admins_insert_team_members" on public.team_members;
-create policy "admins_insert_team_members" on public.team_members for insert to authenticated with check ((select public.is_admin()));
+create policy "admins_insert_team_members" on public.team_members for insert to authenticated with check (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('admin', 'editor')));
 drop policy if exists "admins_update_team_members" on public.team_members;
-create policy "admins_update_team_members" on public.team_members for update to authenticated using ((select public.is_admin())) with check ((select public.is_admin()));
+create policy "admins_update_team_members" on public.team_members for update to authenticated using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('admin', 'editor'))) with check (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('admin', 'editor')));
 drop policy if exists "admins_delete_team_members" on public.team_members;
-create policy "admins_delete_team_members" on public.team_members for delete to authenticated using ((select public.is_admin()));
+create policy "admins_delete_team_members" on public.team_members for delete to authenticated using (exists (select 1 from public.profiles p where p.id = auth.uid() and p.role in ('admin', 'editor')));
 
 insert into storage.buckets (id, name, public) values ('team-images', 'team-images', true) on conflict (id) do update set public = excluded.public;
 drop policy if exists "team_images_public_read" on storage.objects;
