@@ -3,22 +3,19 @@ import Header from "./components/Header";
 import Home from "./pages/Home";
 import Articles from "./pages/Articles";
 import Content from "./pages/Content";
+import Research from "./pages/Research";
 
 type PlaceholderPageProps = {
   title: string;
   description: string;
 };
 
-function PlaceholderPage({
-  title,
-  description,
-}: PlaceholderPageProps) {
+function PlaceholderPage({ title, description }: PlaceholderPageProps) {
   return (
     <main className="page-shell simple-page">
       <p className="eyebrow">Economic Policy Lab</p>
       <h1>{title}</h1>
       <p>{description}</p>
-
       <Link to="/" className="button button-outline">
         Back to Home
       </Link>
@@ -41,21 +38,10 @@ export default function App() {
       <Header />
 
       <Routes>
-        
         <Route path="/" element={<Home />} />
-
         <Route path="/articles" element={<Articles />} />
-
-        <Route
-          path="/research"
-          element={
-            <PlaceholderPage
-              title="Research Archive"
-              description="Working papers, policy briefs, and research from the Economic Policy Lab."
-            />
-          }
-        />
-
+        <Route path="/research" element={<Research />} />
+        <Route path="/content" element={<Content />} />
         <Route
           path="/team"
           element={
@@ -65,7 +51,6 @@ export default function App() {
             />
           }
         />
-
         <Route
           path="/join"
           element={
@@ -75,7 +60,6 @@ export default function App() {
             />
           }
         />
-
         <Route
           path="/login"
           element={
@@ -85,11 +69,6 @@ export default function App() {
             />
           }
         />
-
-        <Route
-          <Route path="/content" element={<Content />} />
-        />
-
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
