@@ -8,6 +8,8 @@ import Join from "./pages/Join";
 import Login from "./pages/Login";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Member from "./pages/Member";
+import MemberWrite from "./pages/MemberWrite";
 
 type PlaceholderPageProps = { title: string; description: string };
 function PlaceholderPage({ title, description }: PlaceholderPageProps) {
@@ -26,7 +28,8 @@ export default function App() {
     <Route path="/login" element={<Login />} />
     <Route path="/auth" element={<Auth />} />
     <Route path="/admin" element={<Admin />} />
-    <Route path="/member" element={<PlaceholderPage title="Member area" description="Member workspace migration is still in progress. Please use the existing member area for submissions." />} />
+    <Route path="/member" element={<Member />} />
+    <Route path="/member/write" element={<MemberWrite />} />
     <Route path="/team" element={<PlaceholderPage title="Our Team" description="Meet the people behind the Economic Policy Lab." />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes><footer className="site-footer">© 2025 Komunitas Ekonom Muda Indonesia / Economic Policy Lab. All rights reserved.</footer></div>;
