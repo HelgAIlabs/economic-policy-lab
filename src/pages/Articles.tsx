@@ -140,7 +140,7 @@ export default function Articles() {
           {visibleArticles.map((article) => (
             <article className="insight-card" key={article.id}>
               <Link
-                to={`/content?id=${encodeURIComponent(String(article.id))}`}
+                to={`/articles/${encodeURIComponent(String(article.id))}`}
                 className="insight-image-link"
                 aria-label={`Read ${article.title}`}
               >
@@ -165,7 +165,7 @@ export default function Articles() {
 
               <h2>
                 <Link
-                  to={`/content?id=${encodeURIComponent(String(article.id))}`}
+                  to={`/articles/${encodeURIComponent(String(article.id))}`}
                 >
                   {article.title}
                 </Link>
