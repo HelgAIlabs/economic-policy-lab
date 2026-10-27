@@ -119,15 +119,6 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="home-stats" aria-label="Economic Policy Lab at a glance">
-        {stats.map((stat) => (
-          <div className="home-stat" key={stat.label}>
-            <span className="home-stat-value">{stat.value}</span>
-            <span className="home-stat-label">{stat.label}</span>
-          </div>
-        ))}
-      </section>
-
       <section className="home-featured">
         <div className="home-section-heading">
           <h2>Featured Commentary</h2>
