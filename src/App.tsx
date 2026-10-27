@@ -11,6 +11,7 @@ import Admin from "./pages/Admin";
 import Member from "./pages/Member";
 import EditorialEditor from "./pages/EditorialEditor";
 import TeamEditor from "./pages/TeamEditor";
+import Team from "./pages/Team";
 
 type PlaceholderPageProps = { title: string; description: string };
 function PlaceholderPage({ title, description }: PlaceholderPageProps) {
@@ -34,7 +35,7 @@ export default function App() {
     <Route path="/editor/team" element={<TeamEditor />} />
     <Route path="/editor/:id" element={<EditorialEditor />} />
     <Route path="/member" element={<Member />} />
-    <Route path="/team" element={<PlaceholderPage title="Our Team" description="Meet the people behind the Economic Policy Lab." />} />
+    <Route path="/team" element={<Team />} />
     <Route path="*" element={<NotFoundPage />} />
   </Routes><footer className="site-footer">© 2025 Komunitas Ekonom Muda Indonesia / Economic Policy Lab. All rights reserved.</footer></div>;
 }
